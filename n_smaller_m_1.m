@@ -43,4 +43,22 @@ for i = 1 : s_combination
     permutation_rows_item =size(t_permutation_item,1);
     sum_size_permutation = sum_size_permutation + permutation_rows_item;
 end
-
+%横纵坐标初始化
+x = [];
+y = [];
+ab = 0.4;
+for i = 1 : sum_size_permutation
+    %每一组迁移的能耗
+    group_source_sum = 0;
+    %每一组迁移的时延
+    group_time_sum = 0;
+    for j = 1 : n
+        group_source_sum = group_source_sum + source_consume_method(eval(['s', num2str(j)]),eval(['t',num2str(t_permutation(i, j))]),0.01);
+        group_time_sum = group_time_sum + time_consume_method(eval(['s', num2str(j)]),eval(['t',num2str(t_permutation(i, j))]),0.01);
+    end
+    x(i) = i;
+    y(i) = ab * group_source_sum + (1 - ab) * group_time_sum;
+end
+%bar(y);
+scatter(x, y, 'r');
+xlabel('目标节点组合'),ylabel('能量消耗情况(mWh)');

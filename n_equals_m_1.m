@@ -28,33 +28,28 @@ t4 = [randi([0 21000]), C(randi([1 length(C)])), C_S(randi([1 length(C_S)])), P(
 t5 = [randi([0 21000]), C(randi([1 length(C)])), C_S(randi([1 length(C_S)])), P(randi([1 length(P)])), P_S(randi([1 length(P_S)])), 0]
 t6 = [randi([0 21000]), C(randi([1 length(C)])), C_S(randi([1 length(C_S)])), P(randi([1 length(P)])), P_S(randi([1 length(P_S)])), 0]
 %源节点数量n
-n = 4;
+n = 6;
 %目标节点数量m
-m = [1, 2, 3, 4, 5, 6];
-%目标节点数量为n的所有组合
-t_combination = combntns(m, n);
-s_combination = size(t_combination,1);
-%目标节点数量为n的所有排列情况
-sum_size_permutation = 0;
-t_permutation = [];
-for i = 1 : s_combination
-    t_permutation_item = perms(t_combination(i, :));
-    t_permutation = [t_permutation; t_permutation_item];
-    permutation_rows_item =size(t_permutation_item,1);
-    sum_size_permutation = sum_size_permutation + permutation_rows_item;
-end
+m = 6;
+%矩阵全排列及行数
+t_permutation = perms([1, 2, 3, 4, 5, 6]);
+permutation_rows =size(t_permutation,1);
 %横纵坐标初始化
 x = [];
 y = [];
-for i = 1 : sum_size_permutation
-    %一组迁移的总能耗
-    group_sum = 0;
-    for j = 1 : n
-        group_sum = group_sum + source_consume_method(eval(['s', num2str(j)]),eval(['t',num2str(t_permutation(i, j))]),0.01);
+ab = 0.2;
+for i = 1 : permutation_rows
+    %每一组迁移的总能耗
+    group_source_sum = 0;
+    %每一组迁移的总时延
+    group_time_sum = 0;
+    for j = 1 : m
+        group_source_sum = group_source_sum + source_consume_method(eval(['s', num2str(j)]),eval(['t',num2str(t_permutation(i, j))]),0.01);
+        group_time_sum = group_time_sum + time_consume_method(eval(['s', num2str(j)]),eval(['t',num2str(t_permutation(i, j))]),0.01);
     end
     x(i) = i;
-    y(i) = group_sum;
+    y(i) = ab * group_source_sum + (1 - ab) * group_time_sum;
 end
-bar(y);
-%scatter(x, y, 'r');
-xlabel('目标节点组合'),ylabel('能量消耗情况(mWh)');
+%bar(y);
+scatter(x, y, 'r');
+xlabel('目标节点组合'),ylabel('能耗及时延消耗情况');
