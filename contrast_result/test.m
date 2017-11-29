@@ -1,5 +1,2 @@
-A = 
-for i=1:10
-  A(i) = i;
-end
-A(2)
+A = [9, 4, 6, 7];
+[sA index] = sort(A, 'descend')
