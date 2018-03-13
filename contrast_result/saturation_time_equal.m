@@ -78,8 +78,12 @@ for i = 1 : node_num
     y2(i) = min([s_exist_time max(saturation_exist_time)])
 end
 % plot(x, y1, '-b', x, y2, '-r');
-bar(x, [y1; y2]');
+c = bar(x, [y1; y2]');
+color = [1 0 0;1 1 1];
+for i=1:2
+set(c(i),'FaceColor',color(i,:));
+end
 title('自组网饱和时间与节点数量的关系')
 xlabel('智能节点对数');
-ylabel('计算迁移次数')
+ylabel('自组网饱和时间')
 legend('正常匹配','饱和策略');

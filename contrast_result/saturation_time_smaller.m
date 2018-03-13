@@ -14,7 +14,7 @@ P_S = 100 : 100 : 1000;
 W_S = 0.1 : 0.5 : 8;
 W_T = 0;
 %源节点及目标节点初始化
-node_num = 20;
+node_num = 30;
 diff = 3;
 for i = 1 : node_num + diff
     eval(['s', num2str(i), '=', '[randi([S_MIN S_MAX]), C(randi([1 length(C)])), C_S(randi([1 length(C_S)])), P(randi([1 length(P)])), P_S(randi([1 length(P_S)])), W_S(randi([1 length(W_S)]))]', ';']);  
@@ -78,8 +78,12 @@ for i = 1 : node_num
     end
     y2(i) = min([s_exist_time max(saturation_exist_time)])
 end
-bar(x, [y1; y2]');
+c = bar(x, [y1; y2]');
+color = [1 0 0;1 1 1];
+for i=1:2
+set(c(i),'FaceColor',color(i,:));
+end
 title('自组网饱和时间与节点数量的关系')
 xlabel('智能节点对数');
-ylabel('计算迁移次数')
+ylabel('自组网饱和时间')
 legend('正常匹配','饱和策略');
